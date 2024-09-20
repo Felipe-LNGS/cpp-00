@@ -5,6 +5,7 @@
 #include <string>
 #include <limits>
 #include <iomanip>
+#include <cstdlib>
 
 const std::string RESET = "\033[0m";
 const std::string RED = "\033[31m";
@@ -36,11 +37,11 @@ public:
     // Destructeur
     ~Contact();
 
-    bool isValidPhoneNumber(const std::string &number, size_t Length);
+    bool isValidPhoneNumber(const std::string &number);
     std::string getValidInput(const std::string &prompt);
-    void inputContact();
+    int inputContact();
     void displayContact() const;
-
+	
     void setFirstName(const std::string &firstName);
     void setLastName(const std::string &lastName);
     void setNickName(const std::string &nickName);

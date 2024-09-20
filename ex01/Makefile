@@ -1,29 +1,37 @@
-NAME =	phonebook
-CPP =	c++
-FLAGS =	-Wall -Wextra -Werror -g -std=c++98
-RM =	rm -rf
 
-SRCS =	Contact.cpp	\
-		main.cpp	\
-		PhoneBook.cpp \
-		
-OBJS = $(SRCS:.cpp=.o)
+NAME        =   phonebook
 
-.c.o:
-	@$(CPP) $(FLAG) -c $< -o $@
+CC          =   c++
 
-all: $(NAME)
+FLAG        =   -std=c++98 -Wall -Wextra -Werror -pedantic -g3
 
-$(NAME): $(OBJS)
-	@$(CPP) $(FLAGS) -o $(NAME) $(OBJS)
-                                                        
+C_FILES     =   main.cpp PhoneBook.cpp Contact.cpp 
+
+OBJ_DIR     =   builds
+
+OBJS        =   $(addprefix $(OBJ_DIR)/, $(C_FILES:.cpp=.o))
+
+DEPS        =   $(OBJS:.o=.d)
+
+all:        $(NAME)
+
+$(OBJ_DIR):
+	@mkdir -p $(OBJ_DIR)
+
+$(OBJ_DIR)/%.o: %.cpp | $(OBJ_DIR)
+	$(CC) $(FLAG) -MMD -MP -c $< -o $@
+
+$(NAME):    $(OBJS)
+	$(CC) $(OBJS) -o $(NAME)
+
 clean:
-	@$(RM) $(OBJS) $(NAME)
+	rm -f $(OBJ_DIR)/*.o $(DEPS) rm -rf $(OBJ_DIR)
 
-fclean: clean
-	@$(RM) $(OBJS) $(NAME)
+fclean:    clean
+	rm -f $(NAME)
 
-re: fclean all
+re:    fclean all
 
-.PHONY: all clean fclean re
+-include $(DEPS)
 
+.PHONY:    all clean fclean re
